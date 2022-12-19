@@ -6,6 +6,7 @@ import { Context } from "../context";
 import { Table } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Button, Modal } from "antd";
 
 const CheckOut = () => {
   const context = useContext(Context);
@@ -20,6 +21,16 @@ const CheckOut = () => {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOk = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   const handleClickOrder = async (_body, _config) => {
@@ -182,9 +193,20 @@ const CheckOut = () => {
               type="button"
               className="btn btn-primary mx-1"
               onClick={() => handleClickOrder(context.order, config)}
+              disabled={!token}
             >
               Đặt hàng
             </button>
+            {!token && (
+              <Modal
+                title="Yêu cầu đăng nhập"
+                open={!isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+              >
+                <p>Hãy đăng nhập để đặt hàng</p>
+              </Modal>
+            )}
           </div>
         </div>
       </div>
